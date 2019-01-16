@@ -17,9 +17,48 @@ api.anything__endpoint___get(params={}, headers={}, data={}, json={}, auth=())
 ```
 As you can see double underscores are pretended as slash and at the end you should put three underscores and HTTP method you want to use.
 
-Since this package built on to [requests](https://github.com/requests/requests) you can use all auth libraries such as [requests-oauthlib](https://github.com/requests/requests-oauthlib), [requests-kerberos](https://github.com/requests/requests-kerberos), [requests-ntlm](https://github.com/requests/requests-ntlm).
 
 ## (Not) Frequently asked questions:
+
+#### What is runtime_{attribute}
+If you want to set headers, params, data, json automatically before request you append your function to set them. For example
+```python
+import datetime
+from anyapi import AnyAPI
+
+
+def set_date_as_header(headers, **kwargs):
+    now = datetime.datetime.now()
+    return {**headers,
+            'date': now.strftime('%B %d %Y')}
+
+
+api = AnyAPI('https://httpbin.org')
+api.runtime_headers.append(set_date_as_header)
+print(api.anything__endpoint___get().json())
+
+# output
+{
+   'args': {},
+   'data': '',
+   'files': {},
+   'form': {},
+   'headers': {
+      'Accept-Encoding': 'identity',
+      'Connection': 'close',
+      'Date': 'January 16 2019',
+      'Host': 'httpbin.org'
+   },
+   'json': None,
+   'method': 'GET',
+   'origin': 'XX.XX.XX.XX',
+   'url': 'https://httpbin.org/anything/endpoint'
+}
+```
+
+#### What can I use for auth attribute?
+Since this package built on to [requests](https://github.com/requests/requests) you can use all auth libraries such as [requests-oauthlib](https://github.com/requests/requests-oauthlib), [requests-kerberos](https://github.com/requests/requests-kerberos), [requests-ntlm](https://github.com/requests/requests-ntlm).
+
 #### What if I need to access a endpoint which have dots inside url
 Due that most of the APIs doesn't use dots at their endpoints I didn't thought a way for this instead use `make_request` method directly. For example
 ```python

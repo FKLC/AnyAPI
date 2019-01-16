@@ -18,12 +18,31 @@ class AnyAPI:
         self.session.headers = default_headers
         self.session.auth = default_auth
 
+        self.runtime_params = []
+        self.runtime_headers = []
+        self.runtime_data = []
+        self.runtime_json = []
+
     def make_request(self, path, method, **kwargs):
         if not kwargs.get('auth', ()):
             kwargs['auth'] = ''
             del kwargs['auth']
         kwargs['data'] = {**kwargs.get('data', {}), **self.default_data}
         kwargs['json'] = {**kwargs.get('json', {}), **self.default_json}
+
+        keyword_arguments = {'params': kwargs.get('params', {}),
+                            'headers': kwargs.get('headers', {}),
+                            'data': kwargs.get('data', {}),
+                            'json': kwargs.get('json', {})}
+        for function in self.runtime_params:
+            kwargs['params'] = function(**keyword_arguments)
+        for function in self.runtime_headers:
+            kwargs['headers'] = function(**keyword_arguments)
+        for function in self.runtime_data:
+            kwargs['data'] = function(**keyword_arguments)
+        for function in self.runtime_json:
+            kwargs['json'] = function(**keyword_arguments)
+
         for key in list(kwargs.keys()):
             if not kwargs[key]:
                 del kwargs[key]

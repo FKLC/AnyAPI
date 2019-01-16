@@ -19,7 +19,8 @@ class AnyAPI:
         self.session.auth = default_auth
 
     def make_request(self, path, method, **kwargs):
-        if not kwargs.get('auth', {}):
+        if not kwargs.get('auth', ()):
+            kwargs['auth'] = ''
             del kwargs['auth']
         kwargs['data'] = {**kwargs.get('data', {}), **self.default_data}
         kwargs['json'] = {**kwargs.get('json', {}), **self.default_json}

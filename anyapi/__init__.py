@@ -19,10 +19,10 @@ class AnyAPI:
         self.session.auth = default_auth
 
     def make_request(self, path, method, **kwargs):
-        if not kwargs['auth']:
+        if not kwargs.get('auth', {}):
             del kwargs['auth']
-        kwargs['data'] = {**kwargs['data'], **self.default_data}
-        kwargs['json'] = {**kwargs['json'], **self.default_json}
+        kwargs['data'] = {**kwargs.get('data', {}), **self.default_data}
+        kwargs['json'] = {**kwargs.get('json', {}), **self.default_json}
         for key in list(kwargs.keys()):
             if not kwargs[key]:
                 del kwargs[key]

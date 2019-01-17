@@ -18,10 +18,11 @@ class AnyAPI:
         self.session.headers = default_headers
         self.session.auth = default_auth
 
-        self.runtime_params = []
-        self.runtime_headers = []
-        self.runtime_data = []
-        self.runtime_json = []
+        self.filter_params = []
+        self.filter_headers = []
+        self.filter_data = []
+        self.filter_json = []
+        self.filter_response = []
 
     def make_request(self, path, method, **kwargs):
         if not kwargs.get('auth', ()):
@@ -33,22 +34,27 @@ class AnyAPI:
         keyword_arguments = {'params': kwargs.get('params', {}),
                             'headers': kwargs.get('headers', {}),
                             'data': kwargs.get('data', {}),
-                            'json': kwargs.get('json', {})}
-        for function in self.runtime_params:
+                            'json': kwargs.get('json', {}),
+                            'path': path}
+        for function in self.filter_params:
             kwargs['params'] = function(**keyword_arguments)
-        for function in self.runtime_headers:
+        for function in self.filter_headers:
             kwargs['headers'] = function(**keyword_arguments)
-        for function in self.runtime_data:
+        for function in self.filter_data:
             kwargs['data'] = function(**keyword_arguments)
-        for function in self.runtime_json:
+        for function in self.filter_json:
             kwargs['json'] = function(**keyword_arguments)
 
         for key in list(kwargs.keys()):
             if not kwargs[key]:
                 del kwargs[key]
 
-        return getattr(self.session, method)(self.base_url + path,
+        response = getattr(self.session, method)(self.base_url + path,
                                                  **kwargs)
+        for function in self.filter_response:
+            response = function(**keyword_arguments, response=response)
+
+        return response
 
     def __getattr__(self, path):
         path, method = path.split('___')

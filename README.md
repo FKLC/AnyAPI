@@ -20,7 +20,7 @@ As you can see double underscores are pretended as slash and at the end you shou
 
 ## (Not) Frequently asked questions:
 
-#### What is runtime_{attribute}
+#### What is filter_{attribute} ?
 If you want to set headers, params, data, json automatically before request you append your function to set them. For example
 ```python
 import datetime
@@ -34,7 +34,8 @@ def set_date_as_header(headers, **kwargs):
 
 
 api = AnyAPI('https://httpbin.org')
-api.runtime_headers.append(set_date_as_header)
+api.filter_headers.append(set_date_as_header)
+
 print(api.anything__endpoint___get().json())
 
 # output
@@ -56,10 +57,28 @@ print(api.anything__endpoint___get().json())
 }
 ```
 
+#### What is filter_response ?
+Lets suppose you want to raise error if response isn't what you expected for or you want to log it or some action after you get response and this is what is filter_response stands for. For Example:
+```python
+from anyapi import AnyAPI
+
+
+def check_http_status_code(response, **kwargs):
+    if response.status_code != 200:
+      raise Exception(f'API returned {response.status_code}')
+    return response
+
+
+api = AnyAPI('https://httpbin.org')
+api.filter_response.append(check_http_status_code)
+
+api.status__500___get()
+```
+
 #### What can I use for auth attribute?
 Since this package built on to [requests](https://github.com/requests/requests) you can use all auth libraries such as [requests-oauthlib](https://github.com/requests/requests-oauthlib), [requests-kerberos](https://github.com/requests/requests-kerberos), [requests-ntlm](https://github.com/requests/requests-ntlm).
 
-#### What if I need to access a endpoint which have dots inside url
+#### What if I need to access a endpoint which have dots inside url?
 Due that most of the APIs doesn't use dots at their endpoints I didn't thought a way for this instead use `make_request` method directly. For example
 ```python
 from anyapi import AnyAPI

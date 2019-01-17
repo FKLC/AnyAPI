@@ -78,6 +78,11 @@ api.status__500___get()
 #### What can I use for auth attribute?
 Since this package built on to [requests](https://github.com/requests/requests) you can use all auth libraries such as [requests-oauthlib](https://github.com/requests/requests-oauthlib), [requests-kerberos](https://github.com/requests/requests-kerberos), [requests-ntlm](https://github.com/requests/requests-ntlm).
 
+#### What if I need to access a parent path?
+If you only going to need it once or twice in your code you can pass `url` directly but if you going to use it many times you can may think to change `base_url` to make your code look better.
+###### NOTE: if you pass url `path` is not going to be processed.
+
+
 #### What if I need to access a endpoint which have dots inside url?
 Due that most of the APIs doesn't use dots at their endpoints I didn't thought a way for this instead use `make_request` method directly. For example
 ```python

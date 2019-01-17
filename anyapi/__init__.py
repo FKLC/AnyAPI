@@ -1,3 +1,4 @@
+from urllib.parse import urlparse
 import requests
 
 
@@ -25,9 +26,19 @@ class AnyAPI:
         self.filter_response = []
 
     def make_request(self, path, method, **kwargs):
-        if not kwargs.get('auth', ()):
+        if not kwargs.get('auth'):
             kwargs['auth'] = ''
             del kwargs['auth']
+
+        if kwargs.get('url'):
+            url = kwargs.get('url')
+            path = urlparse(url).path
+            if path.startswith('/'):
+                path = path[1:]
+            del kwargs['url']
+        else:
+            url = self.base_url + path
+
         kwargs['data'] = {**kwargs.get('data', {}), **self.default_data}
         kwargs['json'] = {**kwargs.get('json', {}), **self.default_json}
 
@@ -35,7 +46,8 @@ class AnyAPI:
                             'headers': kwargs.get('headers', {}),
                             'data': kwargs.get('data', {}),
                             'json': kwargs.get('json', {}),
-                            'path': path}
+                            'path': path,
+                            'url': url}
         for function in self.filter_params:
             kwargs['params'] = function(**keyword_arguments)
         for function in self.filter_headers:
@@ -49,8 +61,7 @@ class AnyAPI:
             if not kwargs[key]:
                 del kwargs[key]
 
-        response = getattr(self.session, method)(self.base_url + path,
-                                                 **kwargs)
+        response = getattr(self.session, method)(url, **kwargs)
         for function in self.filter_response:
             response = function(**keyword_arguments, response=response)
 
@@ -64,11 +75,13 @@ class AnyAPI:
                         headers={},
                         data={},
                         json={},
-                        auth=():
+                        auth=(),
+                        url='':
                         self.make_request(path,
                                           method,
                                           params=params,
                                           headers=headers,
                                           data=data,
                                           auth=auth,
-                                          json=json))
+                                          json=json,
+                                          url=url))

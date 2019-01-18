@@ -33,11 +33,12 @@ class AnyAPI:
         if kwargs.get('url'):
             url = kwargs.get('url')
             path = urlparse(url).path
-            if path.startswith('/'):
-                path = path[1:]
             del kwargs['url']
         else:
             url = self.base_url + path
+
+        if path.startswith('/'):
+            path = path[1:]
 
         kwargs['data'] = {**kwargs.get('data', {}), **self.default_data}
         kwargs['json'] = {**kwargs.get('json', {}), **self.default_json}

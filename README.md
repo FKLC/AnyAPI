@@ -1,5 +1,5 @@
 # AnyAPI
-AnyAPI is a library that I developed for myself to have a better looking code instead putting URLs to everywhere I used dynamic method calls to access a endpoint. Also this library provides `filters` to help you to modify request, raise errors or log requests instead of writing them everywhere to make your code more manageable.
+AnyAPI is a library that I developed for myself to have better looking code instead putting URLs to everywhere I used dynamic method calls to access a endpoint. Also this library provides `filters` to help you to modify request, raise errors or log requests instead of writing them everywhere to make your code more manageable.
 
 For example if I want to make request to https://httpbin.org/anything/endpoint
 ```python
@@ -57,4 +57,8 @@ Library is avaible on PyPi so just run
 pip install anyapi
 ```
 
-# To learn more check [wiki page](https://github.com/FKLC/AnyAPI/wiki/)
+### For Advanced Users
+After publishing this in [r/Python](https://www.reddit.com/r/Python/) [preslavrachev](https://www.reddit.com/user/preslavrachev) made a [comment](https://www.reddit.com/r/Python/comments/ahlqau/announcement_of_anyapi_a_python_library_to_help/eegcc8o) about [Uplink library](https://github.com/prkumar/uplink/) which is definitely a better library than mine. You should definitely check it out.
+
+
+# To learn more about AnyAPI check [wiki page](https://github.com/FKLC/AnyAPI/wiki/)

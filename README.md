@@ -50,7 +50,7 @@ print(api.anything__endpoint___get().json())
 ```
 As you can see filter worked as expected and set `Date` header.
 
-## Installion
+## Installation
 Library is avaible on PyPi so just run
 
 ```

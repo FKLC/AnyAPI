@@ -66,8 +66,8 @@ Changing proxy automatically after they reach their rate limit
 from anyapi import AnyAPI
 
 proxy_configration = {
-  'default': None,
-  'proxies': [proxy0, proxy1, proxy2,....],
+  'default': proxy0,
+  'proxies': [proxy0, proxy1, proxy2,....], # don't forget to add default proxy!
   'paths': {
     '/anything': rate_limit0,
     '/anything/endpoint': rate_limit1
@@ -92,8 +92,6 @@ Library is avaible on PyPi so just run
 ```
 pip install anyapi
 ```
-
-
 
 
 # To learn more about AnyAPI check [wiki page](https://github.com/FKLC/AnyAPI/wiki/)

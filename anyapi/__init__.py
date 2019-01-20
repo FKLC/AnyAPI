@@ -34,24 +34,26 @@ class AnyAPI:
         self._filter_response = []
 
         if proxy_configration:
-            default = proxy_configration.get('default')
-            paths = proxy_configration.get('paths')
-            proxies = proxy_configration.get('proxies')
+            proxy_default = proxy_configration.get('default')
+            proxy_paths = proxy_configration.get('paths')
+            proxy_proxies = proxy_configration.get('proxies')
 
-            if default:
-                self._session.proxies = {
-                    'http': default_proxy,
-                    'https': default_proxy,
+            if proxy_default:
+                self._default_proxy = {
+                    'http': proxy_default,
+                    'https': proxy_default,
                 }
-            if paths and proxies:
-                for path in paths.keys():
-                    paths[path] = {'limit': paths[path], 'count': 0}
-                self._limited_paths = paths
-                self._proxies = proxies
-                self._proxy_count = len(proxies)
-        self._is_proxies_active = isinstance(self._proxies, list)
-
-
+            if proxy_paths and proxy_proxies:
+                for path in proxy_paths.keys():
+                    proxy_paths[path] = {
+                        'limit': proxy_paths[path],
+                        'count': 0
+                    }
+                self._limited_paths = proxy_paths
+                self._proxies = proxy_proxies
+                self._proxy_count = len(proxy_proxies)
+        self._is_proxies_set = isinstance(self._proxies, list)
+        self._is_default_proxy_set = isinstance(self._default_proxy, dict)
 
     def _make_request(self, path, method, **kwargs):
         """Return a requests.response
@@ -73,18 +75,19 @@ class AnyAPI:
         else:
             url = self._base_url + path
 
-
         # merge default and user passed data and json
         kwargs['data'] = {**self._default_data, **kwargs.get('data', {})}
         kwargs['json'] = {**self._default_json, **kwargs.get('json', {})}
 
         # keyword_arguments to pass filter functions
-        keyword_arguments = {'params': kwargs.get('params', {}),
-                            'headers': kwargs.get('headers', {}),
-                            'data': kwargs.get('data', {}),
-                            'json': kwargs.get('json', {}),
-                            'path': path,
-                            'url': url}
+        keyword_arguments = {
+            'params': kwargs.get('params', {}),
+            'headers': kwargs.get('headers', {}),
+            'data': kwargs.get('data', {}),
+            'json': kwargs.get('json', {}),
+            'path': path,
+            'url': url
+        }
         # apply all filter functions
         for function in self._filter_params:
             kwargs['params'] = function(**keyword_arguments)
@@ -100,17 +103,21 @@ class AnyAPI:
             if not kwargs[key]:
                 del kwargs[key]
 
-        if self._is_proxies_active and path in self._limited_paths:
+        if self._is_proxies_set and path in self._limited_paths:
             use_count = self._limited_paths[path]['count']
             limit = self._limited_paths[path]['limit']
-            proxy_to_use = self._proxies[(use_count // limit - self._proxy_count) % self._proxy_count]
+            proxy_to_use = self._proxies[
+                (use_count // limit - self._proxy_count) % self._proxy_count]
             self._limited_paths[path]['count'] += 1
             self._session.proxies = {
                 'http': proxy_to_use,
                 'https': proxy_to_use,
             }
         else:
-            self._session.proxies = None
+            if self._is_default_proxy_set:
+                self._session.proxies = self._default_proxy
+            else:
+                self._session.proxies = None
 
         # call requests.Session.{method}(url, **kwargs)
         response = getattr(self._session, method.lower())(url, **kwargs)
@@ -120,9 +127,8 @@ class AnyAPI:
 
         return response
 
-
     def __getattr__(self, path):
-        """Return a function
+        """Return a function or a AnyAPI
 
         When any class attribute called this method called so modifying
         __getattr__ to return make_request will make all attributes equal as
@@ -146,11 +152,13 @@ class AnyAPI:
                                               auth=auth,
                                               json=json,
                                               url=url))
-        elif path == 'PATH':
+        elif path == 'P':
+
             def make_copy(path):
                 self_copy = copy.copy(self)
                 self_copy._recursive_path = self._recursive_path + '/' + path
                 return self_copy
+
             return (lambda path: make_copy(path))
         else:
             self_copy = copy.copy(self)

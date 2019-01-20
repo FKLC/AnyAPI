@@ -14,4 +14,4 @@ credentials = flow.step2_exchange(code)
 spotify_api = AnyAPI(
     'https://api.spotify.com/v1',
     default_auth=OAuth2BearerToken(credentials.access_token))
-print(spotify_api.me___get().json())
+print(spotify_api.me.GET().json())

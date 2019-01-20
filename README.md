@@ -1,9 +1,9 @@
 # AnyAPI
-AnyAPI is a library that I developed for myself to have better looking code instead putting URLs to everywhere I used dynamic method calls to access a endpoint. Also this library provides `filters` to help you to modify request, raise errors or log requests instead of writing them everywhere to make your code more manageable.
+AnyAPI is a library that I developed for myself to have better looking code instead putting URLs to everywhere I used dynamic method calls to access a endpoint.
 
 ### Features
 * Have better looking code using dynamic method calls
-* Filters to help you to modify request, raise errors or log requests instead of writing them everywhere.
+* Filters to help you to modify request, raise errors or log requests instead of writing functions everywhere.
 * Automatically changing proxy according to rate limits specified by you for every path
 
 

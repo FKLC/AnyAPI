@@ -13,7 +13,8 @@ class AnyAPI:
                  default_data={},
                  default_json={},
                  default_auth=(),
-                 proxy_configration={}):
+                 proxy_configration={},
+                 scoped_call=None):
 
         self._base_url = base_url[:-1] if base_url.endswith('/') else base_url
         self._recursive_path = ''
@@ -54,6 +55,10 @@ class AnyAPI:
                 self._proxy_count = len(proxy_proxies)
         self._is_proxies_set = isinstance(self._proxies, list)
         self._is_default_proxy_set = isinstance(self._default_proxy, dict)
+
+        if scoped_call:
+            self._scoped_call = scoped_call
+        self._scoped_call_set = bool(scoped_call)
 
     def _make_request(self, path, method, **kwargs):
         """Return a requests.response
@@ -120,7 +125,10 @@ class AnyAPI:
                 self._session.proxies = None
 
         # call requests.Session.{method}(url, **kwargs)
-        response = getattr(self._session, method.lower())(url, **kwargs)
+        if self._scoped_call_set:
+            response = self._scoped_call(lambda: getattr(self._session, method.lower())(url, **kwargs))
+        else:
+            response = getattr(self._session, method.lower())(url, **kwargs)
         # apply filters for filter_response
         for function in self._filter_response:
             response = function(**keyword_arguments, response=response)

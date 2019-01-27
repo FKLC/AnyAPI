@@ -74,7 +74,7 @@ proxy_configration = {
   }
 }
 
-api = AnyAPI('https://httpbin.org')
+api = AnyAPI('https://httpbin.org', proxy_configration=proxy_configration)
 
 for i in range(10):
   print(api.anything.endpoint.GET().json())

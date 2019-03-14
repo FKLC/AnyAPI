@@ -30,13 +30,14 @@ import datetime
 from anyapi import AnyAPI
 
 
-def set_date_as_header(headers, **kwargs):
+def set_date_as_header(kwargs):
     now = datetime.datetime.now()
-    return {**headers,
-            'date': now.strftime('%B %d %Y')}
+    kwargs['headers'].update({'date': now.strftime('%B %d %Y')})
+
+    return kwargs
 
 api = AnyAPI('https://httpbin.org')
-api._filter_headers.append(set_date_as_header)
+api._filter_request.append(set_date_as_header)
 
 print(api.anything.endpoint.GET().json())
 # output
@@ -65,7 +66,7 @@ Changing proxy automatically after they reach their rate limit
 ```python
 from anyapi import AnyAPI
 
-proxy_configration = {
+proxy_configuration = {
   'default': proxy0,
   'proxies': [proxy0, proxy1, proxy2,....], # don't forget to add default proxy!
   'paths': {
@@ -74,7 +75,7 @@ proxy_configration = {
   }
 }
 
-api = AnyAPI('https://httpbin.org')
+api = AnyAPI('https://httpbin.org', proxy_configuration=proxy_configuration)
 
 for i in range(10):
   print(api.anything.endpoint.GET().json())

@@ -65,6 +65,7 @@ As you can see filter worked as expected and set `Date` header.
 Changing proxy automatically after they reach their rate limit
 ```python
 from anyapi import AnyAPI
+from anyapi.proxy_handlers import RateLimitProxy
 
 proxy_configuration = {
   'default': proxy0,
@@ -75,7 +76,7 @@ proxy_configuration = {
   }
 }
 
-api = AnyAPI('https://httpbin.org', proxy_configuration=proxy_configuration)
+api = AnyAPI('https://httpbin.org', proxy_configuration=proxy_configuration, proxy_handler=RateLimitProxy)
 
 for i in range(10):
   print(api.anything.endpoint.GET().json())

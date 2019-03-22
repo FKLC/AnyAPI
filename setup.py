@@ -10,7 +10,7 @@ README = (HERE / "README.md").read_text()
 # This call to setup() does all the work
 setup(
     name="anyapi",
-    version="1.1.4",
+    version="1.1.401",
     description="An API Wrapper For Every API",
     long_description=README,
     long_description_content_type="text/markdown",

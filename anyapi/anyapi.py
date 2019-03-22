@@ -53,7 +53,9 @@ class AnyAPI:
         for function in self._filter_request:
             function({**kwargs, "path": path, "url": url})
 
-        self.__session.proxies = self.__proxy_handler.get(kwargs)
+        self.__session.proxies = self.__proxy_handler.get(
+            {**kwargs, "path": path, "url": url}
+        )
 
         if self.__scoped_call is not None:
             response = self.__scoped_call(

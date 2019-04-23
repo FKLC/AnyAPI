@@ -1,3 +1,5 @@
+from collections import defaultdict
+from functools import reduce
 from urllib.parse import urlparse
 
 import requests
@@ -15,7 +17,7 @@ class AnyAPI:
         default_auth=(),
         proxy_configuration={},
         proxy_handler=NoProxy,
-        scoped_call=None,
+        scoped_calls=[],
     ):
         self._base_url = base_url[:-1] if base_url.endswith("/") else base_url
         self._filter_request = []
@@ -27,19 +29,9 @@ class AnyAPI:
         self.__session.auth = default_auth
 
         self.__proxy_handler = proxy_handler(**proxy_configuration)
-        self.__scoped_call = scoped_call
-
-    def __getattr__(self, path):
-        return Chain(self, path)
-
-    def __call__(self, *paths):
-        return Chain(self, "/".join(paths))
+        self.__scoped_calls = scoped_calls
 
     def _make_request(self, method, path, *args, **kwargs):
-        if not kwargs.get("auth"):
-            kwargs["auth"] = ""
-            del kwargs["auth"]
-
         if kwargs.get("url"):
             url = kwargs.get("url")
             path = urlparse(url).path
@@ -47,26 +39,33 @@ class AnyAPI:
         else:
             url = self._base_url + path
 
-        for field in ["params", "headers", "data", "json"]:
-            kwargs.setdefault(field, {})
+        kwargs = defaultdict(dict, **kwargs, path=path, url=url)
 
         for function in self._filter_request:
-            function({**kwargs, "path": path, "url": url})
+            function(kwargs)
 
-        self.__session.proxies = self.__proxy_handler.get(
-            {**kwargs, "path": path, "url": url}
-        )
+        self.__session.proxies = self.__proxy_handler.get(kwargs)
 
-        if self.__scoped_call is not None:
-            response = self.__scoped_call(
+        del kwargs["path"]
+        del kwargs["url"]
+
+        response = reduce(
+            lambda old_function, new_function: lambda: new_function(old_function),
+            [
                 lambda: getattr(self.__session, method.lower())(
                     url=url, *args, **kwargs
-                )
-            )
-        else:
-            response = getattr(self.__session, method.lower())(url=url, *args, **kwargs)
+                ),
+                *self.__scoped_calls,
+            ],
+        )()
 
         for function in self._filter_response:
             response = function({**kwargs, "path": path, "url": url}, response=response)
 
         return response
+
+    def __getattr__(self, path):
+        return Chain(self, path)
+
+    def __call__(self, *paths):
+        return Chain(self, "/".join(paths))

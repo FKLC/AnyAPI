@@ -9,7 +9,7 @@ class Chain:
             )
         self = object.__new__(cls)
         self.__parent_api = parent_api
-        self.__path = f"/{path}"
+        self.__path = "/" + path
 
         return self
 
@@ -18,7 +18,7 @@ class Chain:
             return lambda *args, **kwargs: self.__parent_api._make_request(
                 method=path, path=self.__path, *args, **kwargs
             )
-        self.__path += f"/{path}"
+        self.__path += "/" + path
 
         return self
 

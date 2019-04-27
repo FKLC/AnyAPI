@@ -47,20 +47,17 @@ class AnyAPI:
         self.__session.proxies = self.__proxy_handler.get(kwargs)
 
         del kwargs["path"]
-        del kwargs["url"]
 
         response = reduce(
             lambda old_function, new_function: lambda: new_function(old_function),
             [
-                lambda: getattr(self.__session, method.lower())(
-                    url=url, *args, **kwargs
-                ),
+                lambda: getattr(self.__session, method.lower())(*args, **kwargs),
                 *self.__scoped_calls,
             ],
         )()
 
         for function in self._filter_response:
-            response = function({**kwargs, "path": path, "url": url}, response=response)
+            response = function({**kwargs, "path": path}, response=response)
 
         return response
 

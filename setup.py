@@ -10,7 +10,7 @@ README = (HERE / "README.md").read_text()
 # This call to setup() does all the work
 setup(
     name="anyapi",
-    version="1.1.501",
+    version="1.1.502",
     description="An API Wrapper For Every API",
     long_description=README,
     long_description_content_type="text/markdown",
@@ -27,5 +27,5 @@ setup(
         "Operating System :: OS Independent",
     ],
     packages=["anyapi"],
-    install_requires=["requests"],
+    install_requires=["requests", "attribute_router==1.0.0"],
 )

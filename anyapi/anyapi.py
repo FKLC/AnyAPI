@@ -1,14 +1,15 @@
+import re
 from collections import defaultdict
 from functools import reduce
 from urllib.parse import urlparse
 
 import requests
+from attribute_router import Router
 
-from .chain import Chain
 from .proxy_handlers import NoProxy
 
 
-class AnyAPI:
+class AnyAPI(Router):
     def __init__(
         self,
         base_url,
@@ -31,7 +32,18 @@ class AnyAPI:
         self.__proxy_handler = proxy_handler(**proxy_configuration)
         self.__scoped_calls = scoped_calls
 
-    def _make_request(self, method, path, *args, **kwargs):
+        super(AnyAPI, self).__init__(
+            routes={
+                re.compile(
+                    "(.*)/(GET|POST|HEAD|PUT|DELETE|OPTIONS|PATCH)$"
+                ): self._make_request
+            }
+        )
+
+    def _make_request(self, _match, *args, **kwargs):
+        path = _match.group(1)
+        method = _match.group(2)
+
         if kwargs.get("url"):
             url = kwargs.get("url")
             path = urlparse(url).path
@@ -60,9 +72,3 @@ class AnyAPI:
             response = function({**kwargs, "path": path}, response=response)
 
         return response
-
-    def __getattr__(self, path):
-        return Chain(self, path)
-
-    def __call__(self, *paths):
-        return Chain(self, "/".join(paths))

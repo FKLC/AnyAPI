@@ -1,10 +1,10 @@
 # AnyAPI
 
-![Travis (.org)](https://img.shields.io/travis/FKLC/AnyAPI.svg?style=for-the-badge)
-![PyPI - Downloads](https://img.shields.io/pypi/dm/anyapi.svg?style=for-the-badge)
-![PyPI - Python Version](https://img.shields.io/pypi/pyversions/AnyAPI.svg?style=for-the-badge)
-![GitHub release](https://img.shields.io/github/release/FKLC/AnyAPI.svg?style=for-the-badge)
-![GitHub](https://img.shields.io/github/license/FKLC/AnyAPI.svg?style=for-the-badge)
+![Travis (.org)](https://img.shields.io/travis/FKLC/AnyAPI.svg?style=flat-square)
+![PyPI - Downloads](https://img.shields.io/pypi/dm/anyapi.svg?style=flat-square)
+![PyPI - Python Version](https://img.shields.io/pypi/pyversions/AnyAPI.svg?style=flat-square)
+![GitHub release](https://img.shields.io/github/release/FKLC/AnyAPI.svg?style=flat-square)
+![GitHub](https://img.shields.io/github/license/FKLC/AnyAPI.svg?style=flat-square)
 
 AnyAPI is a library that I developed for myself to have better looking code instead putting URLs to everywhere I used dynamic method calls to access a endpoint.
 
@@ -105,7 +105,7 @@ There is a lot of libraries you can find out there for example [Uplink](https://
 
 ## Installation
 
-Library is avaible on PyPi so just run
+Library on PyPI so just run
 
 ```
 pip install anyapi

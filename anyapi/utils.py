@@ -3,7 +3,7 @@ def retry_until(condition):
         try:
             return request()
         except Exception as e:
-            if condition():
+            if condition(e):
                 return retry(request)
             else:
                 raise e
@@ -18,4 +18,4 @@ def retry(max_retries):
         retries[0] += 1
         return retries[0]
 
-    return retry_until(lambda: retry_count() != max_retries)
+    return retry_until(lambda _: retry_count() != max_retries)

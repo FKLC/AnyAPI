@@ -6,13 +6,18 @@
 ![GitHub release](https://img.shields.io/github/release/FKLC/AnyAPI.svg?style=flat-square)
 ![GitHub](https://img.shields.io/github/license/FKLC/AnyAPI.svg?style=flat-square)
 
-AnyAPI is a library that I developed for myself to have better looking code instead putting URLs to everywhere I used dynamic method calls to access a endpoint.
+AnyAPI is a library that helps you to write any API wrappers with ease and in pythonic way.
 
 ### Features
 
-- Have better looking code using dynamic method calls
+- Have better looking code using dynamic method calls.
 - Filters to help you to modify request, raise errors or log requests instead of writing functions everywhere.
-- Automatically changing proxy according to rate limits specified by you for every path
+- Scoped calls to raise errors and take action if necessary.
+- Automatic retrying if the condition met with what you passed.
+- Built-in rate limit proxy changer. (you can write your own proxy handler)
+- Since it is built on top of requests anything compatible with it is compatible with AnyAPI.
+
+But most importantly in AnyAPI almost everything is modular!
 
 ---
 
@@ -99,7 +104,7 @@ If you check output of the all them you can see proxy changes when it reaches li
 
 ### This library is not a new thing
 
-There is a lot of libraries you can find out there for example [Uplink](https://github.com/prkumar/uplink/), [Hammock](https://github.com/kadirpekel/hammock) and many more
+There is a lot of libraries you can find out there for example [Uplink](https://github.com/prkumar/uplink/), [Hammock](https://github.com/kadirpekel/hammock) and many more...
 
 ---
 
@@ -107,7 +112,7 @@ There is a lot of libraries you can find out there for example [Uplink](https://
 
 Library on PyPI so just run
 
-```
+```console
 pip install anyapi
 ```
 

@@ -13,21 +13,18 @@ class AnyAPI(Router):
     def __init__(
         self,
         base_url,
-        default_params={},
-        default_headers={},
-        default_auth=(),
         proxy_configuration={},
         proxy_handler=NoProxy,
         scoped_calls=[],
+        **kwargs
     ):
         self._base_url = base_url[:-1] if base_url.endswith("/") else base_url
         self._filter_request = []
         self._filter_response = []
 
         self.__session = requests.Session()
-        self.__session.params = default_params
-        self.__session.headers = default_headers
-        self.__session.auth = default_auth
+        for attribute, value in kwargs.items():
+            setattr(self.__session, attribute, value)
 
         self.__proxy_handler = proxy_handler(**proxy_configuration)
         self.__scoped_calls = scoped_calls

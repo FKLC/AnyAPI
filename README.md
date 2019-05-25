@@ -5,6 +5,7 @@
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/AnyAPI.svg?style=flat-square)
 ![GitHub release](https://img.shields.io/github/release/FKLC/AnyAPI.svg?style=flat-square)
 ![GitHub](https://img.shields.io/github/license/FKLC/AnyAPI.svg?style=flat-square)
+![Code Climate maintainability](https://img.shields.io/codeclimate/maintainability/FKLC/AnyAPI.svg?style=flat-square)
 
 AnyAPI is a library that helps you to write any API wrappers with ease and in pythonic way.
 

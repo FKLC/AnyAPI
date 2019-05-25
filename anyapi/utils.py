@@ -2,11 +2,11 @@ def retry_until(condition):
     def retry(request):
         try:
             return request()
-        except Exception as e:
-            if condition(e):
+        except Exception as exception:
+            if condition(exception):
                 return retry(request)
             else:
-                raise e
+                raise exception
 
     return retry
 

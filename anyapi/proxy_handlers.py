@@ -3,7 +3,7 @@ class NoProxy:
         return None
 
 
-class RateLimitProxy:
+class RateLimitProxy:  # pragma: no cover
     def __init__(self, proxies, paths, default=None):
         self.proxies = proxies
         self.proxy_count = len(proxies)

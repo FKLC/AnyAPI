@@ -18,4 +18,4 @@ before_script:
 script:
   - pytest --cov=anyapi
 after_script:
-  - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT -t coverage.py
+  - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT -t coverage.py --cov-report xml

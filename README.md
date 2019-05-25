@@ -1,11 +1,10 @@
 # AnyAPI
 
 ![Travis (.org)](https://img.shields.io/travis/FKLC/AnyAPI.svg?style=flat-square)
+![Code Climate maintainability](https://img.shields.io/codeclimate/maintainability/FKLC/AnyAPI.svg?style=flat-square)
+![Code Climate coverage](https://img.shields.io/codeclimate/coverage/FKLC/AnyAPI.svg?style=flat-square)
 ![PyPI - Downloads](https://img.shields.io/pypi/dm/anyapi.svg?style=flat-square)
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/AnyAPI.svg?style=flat-square)
-![GitHub release](https://img.shields.io/github/release/FKLC/AnyAPI.svg?style=flat-square)
-![GitHub](https://img.shields.io/github/license/FKLC/AnyAPI.svg?style=flat-square)
-![Code Climate maintainability](https://img.shields.io/codeclimate/maintainability/FKLC/AnyAPI.svg?style=flat-square)
 
 AnyAPI is a library that helps you to write any API wrappers with ease and in pythonic way.
 
